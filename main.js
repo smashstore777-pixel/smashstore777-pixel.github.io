@@ -388,7 +388,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     .fromTo('.hero-dark', { y: 0, yPercent: 100 }, { ...nr, y: 0, yPercent: 0, duration: 1.1, ease: 'power2.inOut' }, .9)
     // 2. a plain sock drops in, the steps appear
     .fromTo('#bigSock', { y: () => -innerHeight * 1.3, rotate: -30 }, { y: 0, rotate: -6, duration: 1.2, ease: 'back.out(1.3)' }, 1.8)
-    .fromTo('.build-text', { y: 30, opacity: 0 }, { ...nr, y: 0, opacity: 1, duration: .6 }, 2.6)
+    .fromTo('.build-text, .build-skip', { y: 30, opacity: 0 }, { ...nr, y: 0, opacity: 1, duration: .6 }, 2.6)
     .fromTo('#buildBar', { scaleX: 0 }, { ...nr, scaleX: 1, duration: 5.4 }, 2.6)
     .to('#bigSock', { rotate: 6, duration: 5.6 }, 3)
     // 3. knit stripes, fire, smileys (each layer slides in like a wipe)

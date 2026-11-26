@@ -93,7 +93,7 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 
 /* BUILD */
 .stage{position:absolute;inset:0;z-index:6;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:4vw;padding:0 7vw;color:var(--cream);pointer-events:none}
-.build-text{opacity:0}
+.build-text,.build-skip{opacity:0}
 .build-count{font-family:var(--head);color:var(--yellow);font-size:22px;margin-bottom:24px;font-variant-numeric:tabular-nums}
 .build-count span{font-size:64px;font-variant-numeric:tabular-nums}
 .steps{position:relative;height:clamp(200px,26vh,260px)}
@@ -103,6 +103,12 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 .step p{margin-top:16px;font-size:clamp(16px,1.5vw,21px);max-width:28ch;opacity:.85}
 .build-bar{height:6px;background:var(--ink-line);border-radius:9px;overflow:hidden;max-width:360px}
 .build-bar i{display:block;height:100%;width:100%;background:var(--red);transform-origin:left;transform:scaleX(0)}
+/* a way out of the scene for anyone who came to shop */
+.build-skip{position:absolute;left:7vw;bottom:clamp(32px,8vh,88px);pointer-events:auto;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:12px 20px;font:400 18px var(--head);color:var(--yellow);border:3px solid var(--yellow);border-radius:99px;transition:background-color .15s,color .15s,transform .12s}
+.build-skip svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+@media (hover:hover) and (pointer:fine){.build-skip:hover{background:var(--yellow);color:var(--ink)}}
+.build-skip:active{transform:translateY(1px)}
+.build-skip:focus-visible{outline:3px solid var(--yellow);outline-offset:4px}
 .build-sock{position:relative;display:grid;place-items:center;height:100%}
 /* the big sock is 5 stacked, pre-drawn layers; only transforms move, so the browser never redraws the drawing */
 .big-sock{position:relative;width:min(30vw,52vh,400px);aspect-ratio:300/470;transform:translateY(-130vh);will-change:transform}
@@ -115,6 +121,7 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
   background:var(--red);padding:16px 24px;border:4px solid var(--yellow);border-radius:14px;transform:translate(-50%,-50%) rotate(-12deg) scale(0);opacity:0;white-space:nowrap}
 @media(max-width:800px){
   .stage{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-items:start;padding:88px 7vw 32px;gap:0}
+  .build-skip{left:7vw;right:7vw;bottom:84px;justify-content:center;font-size:17px;background:var(--ink)}
   .build-sock{align-self:center}
   .big-sock{width:min(50vw,30vh,260px)}
   .steps{height:150px}
