@@ -40,6 +40,26 @@
   });
   if (read()[id] > 0) status.innerHTML = `Already in your bag. <a href="../../?bag=1">Open bag</a>`;
 
+  /* ---------- SHARE: the phone's own share sheet, else copy link and WhatsApp ---------- */
+  const shareBtn = $('#shareBtn'), menu = $('#shareMenu');
+  const pair = drops.find(d => d.id === id);
+  const shareUrl = document.querySelector('link[rel=canonical]').href;
+  const shareData = { title: `${pair.name} socks · Smash Store`, text: `${pair.name} socks from Smash Store`, url: shareUrl };
+  const toggleMenu = open => { menu.hidden = !open; shareBtn.setAttribute('aria-expanded', String(open)); };
+  shareBtn.addEventListener('click', async () => {
+    if (navigator.share && (!navigator.canShare || navigator.canShare(shareData))) {
+      try { await navigator.share(shareData); return; }
+      catch (e) { if (e.name === 'AbortError') return; }   // closed the sheet: do nothing
+    }
+    toggleMenu(menu.hidden);
+  });
+  $('#copyLink').addEventListener('click', async () => {
+    let ok = false;
+    try { await navigator.clipboard.writeText(shareUrl); ok = true; } catch (e) {}
+    status.textContent = ok ? 'Link copied. Paste it anywhere' : `Copy this link: ${shareUrl}`;
+  });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !menu.hidden) { toggleMenu(false); shareBtn.focus(); } });
+
   if (reduce) return;
 
   /* ---------- HERO DEPTH: three planes, three rates ---------- */

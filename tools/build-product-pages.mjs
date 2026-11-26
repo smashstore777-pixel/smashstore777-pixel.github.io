@@ -18,6 +18,9 @@ const DM = 'https://ig.me/m/smashstore._';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const typeLabel = { ankle: 'Ankle', full: 'Full-length' };
 const arrow = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const shareIco = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+const linkIco = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg>';
+const waIco = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1c-1-.5-2-1.5-2.5-2.5l1-1-1-2L9 9.5z"/></svg>';
 const bagIco = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>';
 
 function more(p) {
@@ -82,6 +85,13 @@ function page(p, i) {
       <div class="pactions">
         <button class="pbtn" id="addBtn" type="button" data-id="${p.id}">Add to bag</button>
         <a class="plink" href="../../?bundle=${p.id}#drops">Start a bundle of 3 or 5 with this pair ${arrow}</a>
+      </div>
+      <div class="pshare">
+        <button class="pshare-btn" id="shareBtn" type="button" aria-expanded="false" aria-controls="shareMenu">${shareIco}<span>Share this pair</span></button>
+        <div class="pshare-menu" id="shareMenu" hidden>
+          <button type="button" id="copyLink">${linkIco}<span>Copy link</span></button>
+          <a id="waLink" href="https://wa.me/?text=${encodeURIComponent(`${p.name} socks from Smash Store ${url}`)}" target="_blank" rel="noopener">${waIco}<span>WhatsApp</span></a>
+        </div>
       </div>
       <p class="pstatus" id="status" role="status" aria-live="polite"></p>
       <p class="pnote">Your bag copies the order for you. Paste it in a DM to <a href="${DM}" target="_blank" rel="noopener">@smashstore._</a> and we confirm the price and delivery there.</p>
