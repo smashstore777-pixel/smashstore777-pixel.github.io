@@ -10,17 +10,10 @@
 html.lenis{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 body{font-family:var(--body);background:var(--yellow);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-body.loading{overflow:hidden}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 h1,h2,h3{font-family:var(--head);font-weight:400;line-height:.9;letter-spacing:-.01em}
 
-/* LOADER */
-.loader{position:fixed;inset:0;z-index:100;background:var(--red);display:grid;place-items:center;align-content:center;gap:18px;color:var(--yellow)}
-.loader-logo{width:190px;animation:bob 1s ease-in-out infinite}
-.loader-count{font-family:var(--head);font-size:64px}
-.loader-text{font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:12px}
-@keyframes bob{50%{transform:translateY(-14px) rotate(-6deg)}}
 
 /* CURSOR */
 /* the sock hangs from the pointer by its cuff; the pointer tip is the cuff's top-left corner */
@@ -58,20 +51,19 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 .hero-dark{position:absolute;inset:0;background:var(--ink);transform:translateY(100%);will-change:transform;z-index:5;pointer-events:none}
 
 .hero-badge{position:relative;z-index:4;flex-shrink:0;width:clamp(96px,min(13vw,19vh),190px);aspect-ratio:1;display:grid;place-items:center}
-.hero-badge img{width:62%;animation:wobble 4s ease-in-out infinite}
+.hero-badge img{width:62%}
 .hero-badge .ring{position:absolute;inset:0;width:100%;height:100%;animation:spin 14s linear infinite}
 .hero-badge text{font-family:var(--head);font-size:15px;letter-spacing:1.5px;fill:var(--ink)}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes wobble{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg) scale(1.04)}}
 .hero-title{position:relative;z-index:4;text-align:center;color:var(--red);
   text-shadow:4px 4px 0 var(--ink)}
 /* the real logo is the title; sized by width and height so it never crowds the badge */
 .hero-logo{display:block;width:min(84vw,118vh,1000px);height:auto;will-change:transform;filter:drop-shadow(5px 5px 0 rgba(13,13,13,.9))}
 /* floating product photos: each is a link to that pair in the shop */
 .sticker{position:absolute;display:block;will-change:transform;width:clamp(110px,13vw,190px);border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 var(--ink);z-index:1;background:#fff;
-  transition:scale .25s cubic-bezier(.3,1.6,.5,1),box-shadow .2s}
+  transition:scale .2s ease-out,box-shadow .2s ease-out}
 .sticker img{display:block;width:100%;border-radius:14px}
-.sticker:hover,.sticker:focus-visible{scale:1.08;box-shadow:12px 12px 0 var(--ink);z-index:7}
+.sticker:hover,.sticker:focus-visible{scale:1.04;box-shadow:12px 12px 0 var(--ink);z-index:7}
 .stk-tag{position:absolute;left:50%;bottom:-16px;translate:-50% 0;white-space:nowrap;font-family:var(--head);font-size:clamp(12px,1.1vw,16px);line-height:1;
   color:var(--yellow);background:var(--red);border:3px solid var(--ink);border-radius:99px;padding:7px 12px 6px;box-shadow:3px 3px 0 var(--ink)}
 .stk-tag b{font-weight:400;color:#fff}
@@ -83,7 +75,7 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 .s3{left:3vw;bottom:-8vh;rotate:7deg}
 .s4{right:3vw;bottom:-10vh;rotate:-8deg}
 @media(max-width:700px){.s3,.s4{display:none}.s1{top:auto;bottom:4vh}.s2{top:auto;bottom:6vh}}
-.scroll-hint{position:absolute;bottom:3vh;left:50%;translate:-50% 0;z-index:4;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.25em;text-transform:uppercase}
+.scroll-hint{position:absolute;bottom:3vh;left:50%;translate:-50% 0;z-index:4;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:700}
 .scroll-hint i{width:2px;height:34px;background:var(--ink);transform-origin:top;animation:drip 1.4s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
@@ -143,7 +135,7 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 .prod[hidden]{display:none}
 .prod .ph{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/5;background:#eee}
 .prod .ph img{width:100%;height:100%;object-fit:cover}
-.prod .tag{position:absolute;top:10px;left:10px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--yellow);border:2px solid var(--ink);padding:3px 9px;border-radius:99px}
+.prod .tag{position:absolute;top:10px;left:10px;font-size:12px;font-weight:700;background:var(--yellow);border:2px solid var(--ink);padding:3px 9px;border-radius:99px}
 .prod .info{padding:12px 4px 10px;flex:1}
 .prod h3{font-size:22px;line-height:1}
 .prod .price{margin-top:6px;font-weight:700;font-size:17px}
@@ -166,7 +158,7 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 }
 
 /* length badge, empty state */
-.prod .len{position:absolute;top:10px;right:10px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--yellow);padding:4px 9px;border-radius:99px}
+.prod .len{position:absolute;top:10px;right:10px;font-size:12px;font-weight:700;background:var(--ink);color:var(--yellow);padding:4px 9px;border-radius:99px}
 .prod .add:disabled{opacity:.35;pointer-events:none}
 .shop-empty{grid-column:1/-1;text-align:center;padding:60px 20px;font-size:18px;border:3px dashed var(--ink);border-radius:20px}
 .shop-empty b{display:block;font-family:var(--head);font-weight:400;font-size:30px;margin-bottom:8px}
@@ -222,7 +214,7 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 .bag-items{flex:1;overflow-y:auto;padding:16px 22px;display:flex;flex-direction:column;gap:14px;overscroll-behavior:contain}
 .bag-empty{text-align:center;margin:auto;opacity:.75;font-size:16px}
 .bag-empty b{display:block;font-family:var(--head);font-weight:400;font-size:28px;margin-bottom:6px}
-.empty-mascot{display:block;width:130px;margin:0 auto 14px;animation:bob 1.6s ease-in-out infinite}
+.empty-mascot{display:block;width:130px;margin:0 auto 14px}
 .bag-line{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:8px}
 .bag-line img{width:64px;height:80px;object-fit:cover;border-radius:8px}
 .bag-line h4{font-family:var(--head);font-weight:400;font-size:18px;line-height:1}
@@ -245,10 +237,10 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 /* WHY */
 .why{background:var(--red);color:var(--yellow);padding:16vh 6vw}
 .why-title{font-size:clamp(46px,8vw,128px);text-align:center;text-shadow:4px 4px 0 var(--ink)}
-.why-title .ch{display:inline-block}
-.why-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:3vw;margin-top:10vh;perspective:1000px}
+.why-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:3vw;margin-top:10vh}
 .why-card{background:var(--yellow);color:var(--ink);border:4px solid var(--ink);border-radius:26px;padding:34px 28px;box-shadow:10px 10px 0 var(--ink)}
-.why-card .emoji{font-size:48px;display:block;margin-bottom:18px}
+.why-card img{width:96px;aspect-ratio:4/5;object-fit:cover;border:3px solid var(--ink);border-radius:12px;margin-bottom:20px;rotate:-4deg}
+.why-card.c2 img{rotate:3deg}
 .why-card h3{font-size:38px;margin-bottom:12px}
 .why-card p{font-size:17px;line-height:1.45}
 @media(max-width:800px){.why-cards{grid-template-columns:1fr}}
@@ -278,7 +270,7 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 @media(max-width:600px){.footer{flex-direction:column;text-align:center}}
 
 @media (prefers-reduced-motion:reduce){
-  .hero-badge img,.hero-badge .ring,.loader-logo,.scroll-hint i,.empty-mascot{animation:none}
+  .hero-badge .ring,.scroll-hint i{animation:none}
 }
 @media(max-width:700px){
   .hero{padding:110px 4vw 165px}

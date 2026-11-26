@@ -1,4 +1,4 @@
-/* Smash Store — scroll experience */
+/* Smash Store: scroll experience */
 gsap.registerPlugin(ScrollTrigger);
 // phones: don't recalculate every time the address bar shows/hides
 ScrollTrigger.config({ ignoreMobileResize: true });
@@ -43,12 +43,6 @@ function sockSVG({ base = '#fff6e0', cuff = '#E8201A', heel = '#0d0d0d', layers 
 
 /* ---------- HERO: socks on the line ---------- */
 
-/* split text into chars */
-document.querySelectorAll('[data-split]').forEach(el => {
-  el.innerHTML = el.textContent.trim().split(/\s+/)
-    .map(w => `<span class="word">${[...w].map(c => `<span class="ch">${c}</span>`).join('')}</span>`).join(' ');
-});
-
 /* ---------- BIG BUILD SOCK ---------- */
 {
   const big = document.getElementById('bigSock');
@@ -63,7 +57,7 @@ document.querySelectorAll('[data-split]').forEach(el => {
 }
 
 /* ---------- MARQUEE ---------- */
-const words = ['BORING IS BANNED', '✦', 'SMASH THE ORDINARY', '✦', 'LOUD FEET ONLY', '✦'];
+const words = ['BORING IS BANNED', '•', 'SMASH THE ORDINARY', '•', 'LOUD FEET ONLY', '•'];
 document.querySelectorAll('.track').forEach(t => {
   const html = words.map(w => `<span>${w}</span>`).join('');
   t.innerHTML = html.repeat(6);
@@ -224,7 +218,7 @@ $('bundleAdd').addEventListener('click', () => {
   const key = `b${bundleSize}:${picks.join(',')}`;
   bag[key] = (bag[key] || 0) + 1;
   save(); renderBag(); bump();
-  toast(`Bundle of ${bundleSize} added to your bag!`);
+  toast(`Bundle of ${bundleSize} added to your bag`);
   picks = []; renderPicker();
 });
 $('bundleClear').addEventListener('click', () => { picks = []; renderPicker(); });
@@ -263,9 +257,9 @@ $('bagOrder').addEventListener('click', () => {
     return parseBundle(k) ? `• ${it.name} x${bag[k]} (${it.detail})` : `• ${it.name} (${it.detail}) x${bag[k]}`;
   }).join('\n');
   const total = allPriced(keys) ? `\nTotal: ${rupees(totalOf(keys))}` : '';
-  const msg = `SMASH! Hi Smash Store, I'd like to order:\n${lines}\nPairs: ${pairCount()}${total}`;
+  const msg = `SMASH\nHi Smash Store, I'd like to order:\n${lines}\nPairs: ${pairCount()}${total}`;
   // copy first (needs the click), then open the DM in a new tab
-  copyText(msg).then(ok => toast(ok ? 'Order copied! Paste it in the Instagram DM.' : 'Send us your order in the Instagram DM.'));
+  copyText(msg).then(ok => toast(ok ? 'Order copied. Paste it in the Instagram DM' : 'Send us your order in the Instagram DM'));
   window.open(DM, '_blank', 'noopener');
 });
 
@@ -354,32 +348,9 @@ menu.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e
   else document.querySelector(target === '#build' ? '#hero' : target).scrollIntoView({ behavior: 'smooth' });
 }));
 
-/* ---------- LOADER ---------- */
-document.body.classList.add('loading');
-const counter = { v: 0 };
-lenis && lenis.stop();
-const intro = gsap.timeline({ paused: true, onComplete: () => {
-  initScenes();
-  document.body.classList.remove('loading');
-  lenis && lenis.start();
-  ScrollTrigger.refresh();
-}});
-intro
-  .from('.hero-badge', { scale: 0, rotate: -270, duration: 1, ease: 'back.out(1.8)' })
-  .from('.hero-logo', { scale: .3, rotate: -10, opacity: 0, duration: 1, ease: 'back.out(2.2)' }, '-=.6')
-  .from('.sticker', { scale: 0, rotate: 40, stagger: .08, duration: .7, ease: 'back.out(2)' }, '-=.8')
-  .from('.scroll-hint, .nav', { opacity: 0, y: 20, duration: .5 }, '-=.4');
-
-gsap.to(counter, {
-  v: 100, duration: reduce ? .2 : .8, ease: 'power2.inOut',
-  onUpdate: () => document.getElementById('count').textContent = Math.round(counter.v),
-  onComplete: () => {
-    gsap.to('#loader', { yPercent: -100, duration: .6, ease: 'power4.inOut', onComplete: () => {
-      document.getElementById('loader').remove();
-    }});
-    intro.timeScale(1.9).play(0);
-  }
-});
+/* ---------- INTRO: one short fade and rise, then the scroll scenes ---------- */
+const intro = gsap.timeline({ onComplete: () => { initScenes(); ScrollTrigger.refresh(); } });
+intro.from('.hero-badge, .hero-logo, .sticker, .scroll-hint', { opacity: 0, y: 16, duration: reduce ? .01 : .5, stagger: reduce ? 0 : .05, ease: 'power2.out' });
 
 /* ---------- SCROLL SCENES ---------- */
 function initScenes() {
@@ -444,15 +415,11 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     onUpdate: self => skewTo(gsap.utils.clamp(-18, 18, self.getVelocity() / -150)) });
 
   /* WHY */
-  gsap.from('.why-title .ch', { yPercent: 110, opacity: 0, rotate: 20, stagger: .02, ease: 'back.out(2)',
-    scrollTrigger: { trigger: '.why-title', start: 'top 80%', end: 'top 40%', scrub: 1 } });
-  gsap.from('.why-card', { rotateX: -90, y: 100, opacity: 0, stagger: .15, duration: 1, ease: 'back.out(1.4)', transformOrigin: '50% 100%',
+  gsap.from('.why-card', { y: 24, opacity: 0, stagger: .08, duration: .5, ease: 'power2.out',
     scrollTrigger: { trigger: '.why-cards', start: 'top 80%' } });
 
   /* ORDER */
-  gsap.from('.o-step', { y: 80, opacity: 0, stagger: .15, duration: .8, ease: 'back.out(1.8)',
-    scrollTrigger: { trigger: '.order-steps', start: 'top 80%' } });
-  gsap.from('.o-step b', { scale: 0, rotate: -180, stagger: .15, duration: .9, ease: 'back.out(2)',
+  gsap.from('.o-step', { y: 24, opacity: 0, stagger: .08, duration: .5, ease: 'power2.out',
     scrollTrigger: { trigger: '.order-steps', start: 'top 80%' } });
 
   /* CTA: sock rain + title */
@@ -462,17 +429,8 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
       scrollTrigger: { trigger: '.cta', start: 'top bottom', end: 'bottom top', scrub: .5 + (i % 3) * .4 }
     });
   });
-  gsap.from('.cta-title span', { yPercent: 100, opacity: 0, scale: .6, stagger: .15, ease: 'back.out(2)',
+  gsap.from('.cta-title span', { yPercent: 30, opacity: 0, stagger: .1, ease: 'power2.out',
     scrollTrigger: { trigger: '.cta', start: 'top 70%', end: 'top 20%', scrub: 1 } });
 });
 }
 
-/* tilt cards on hover */
-document.querySelectorAll('.why-card').forEach(c => {
-  c.addEventListener('mousemove', e => {
-    const r = c.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-    gsap.to(c, { rotateY: x * 14, rotateX: -y * 14, transformPerspective: 800, duration: .4 });
-  });
-  c.addEventListener('mouseleave', () => gsap.to(c, { rotateY: 0, rotateX: 0, duration: .6, ease: 'elastic.out(1,.5)' }));
-});
