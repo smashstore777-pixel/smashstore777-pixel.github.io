@@ -1,0 +1,142 @@
+/* Product pages. Same world as the home page: yellow, red, ink, cream,
+   Bagel Fat One + Space Grotesk, thick ink outlines with hard offset shadows.
+   Each page sets --c (the pair's colour) and --on-c (text that reads on it). */
+:root{
+  --yellow:#FFE500; --red:#E8201A; --ink:#0d0d0d; --cream:#FFF6E0;
+  --red-deep:#C2140E; /* brand red, one step deeper, so yellow text on it clears 4.5:1 */
+  --head:'Bagel Fat One', system-ui, sans-serif;
+  --body:'Space Grotesk', system-ui, sans-serif;
+  --ease:cubic-bezier(.23,1,.32,1);
+  --gut:clamp(16px,4vw,48px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scrollbar-color:var(--ink) var(--cream);-webkit-text-size-adjust:100%}
+body{font-family:var(--body);background:var(--cream);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased;caret-color:var(--red)}
+::selection{background:var(--ink);color:var(--yellow)}
+img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2{font-family:var(--head);font-weight:400;line-height:.95;text-wrap:balance}
+.ico{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+
+/* NAV */
+.pnav{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:16px;padding:16px var(--gut)}
+.pnav-logo img{width:56px;height:56px;transition:transform .18s var(--ease)}
+@media (hover:hover) and (pointer:fine){.pnav-logo:hover img{transform:rotate(-8deg)}}
+.pnav-links{display:flex;gap:4px;background:var(--ink);padding:4px;border-radius:99px;margin-left:auto}
+.pnav-links a{color:var(--cream);font-weight:700;font-size:14px;text-decoration:none;padding:8px 16px;border-radius:99px;transition:background-color .15s,color .15s}
+.pnav-links a:hover{background:var(--yellow);color:var(--ink)}
+.pnav-links a:focus-visible{outline-color:var(--yellow)}
+.pbag{display:flex;align-items:center;gap:8px;font:400 16px var(--head);text-decoration:none;background:var(--ink);color:var(--yellow);border:3px solid var(--ink);border-radius:99px;padding:8px 8px 8px 14px;transition:transform .12s var(--ease)}
+.pbag .ico{width:18px;height:18px}
+.pbag b{display:grid;place-items:center;min-width:28px;height:28px;padding:0 8px;border-radius:99px;background:var(--red-deep);color:var(--yellow);font-weight:400;font-variant-numeric:tabular-nums}
+.pbag:active{transform:translateY(1px)}
+.pbag.bump b{animation:bump .4s var(--ease)}
+@keyframes bump{40%{transform:scale(1.25)}}
+
+/* HERO: the pair on a wall of its own colour. Three planes: the name (back),
+   the photo (middle), the mascot (front). product.js moves them at different rates. */
+.phero{position:relative;overflow:hidden;background:var(--c);color:var(--on-c);min-height:100svh;
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:clamp(24px,4vw,64px);
+  padding:120px var(--gut) 72px}
+.phero-word{position:absolute;inset:auto auto 32px calc(var(--gut) - .04em);width:min(72vw,1100px);z-index:0;pointer-events:none;
+  font-family:var(--head);font-size:clamp(88px,13vw,220px);line-height:.86;letter-spacing:-.02em;text-transform:uppercase;
+  color:color-mix(in srgb,var(--c) 74%,var(--ink));will-change:transform}
+.phero-visual{position:relative;z-index:1;justify-self:center;width:min(100%,420px)}
+.pshot{position:relative;border:5px solid var(--ink);border-radius:24px;overflow:hidden;background:#fff;box-shadow:14px 14px 0 var(--ink);rotate:-4deg;will-change:transform}
+.pshot img{width:100%;height:auto}
+.pmascot{position:absolute;z-index:2;width:38%;height:auto;left:-20%;bottom:-8%;rotate:-10deg;filter:drop-shadow(6px 6px 0 rgba(13,13,13,.9));will-change:transform}
+
+.pbuy{position:relative;z-index:3;align-self:center;background:var(--cream);color:var(--ink);border:4px solid var(--ink);border-radius:24px;box-shadow:10px 10px 0 var(--ink);
+  padding:clamp(24px,3vw,40px);max-width:520px}
+.pbuy h1{font-size:clamp(44px,5.4vw,84px);color:var(--ink)}
+.pmeta{margin-top:12px;font-weight:500;font-size:17px;color:#4a4033}
+.pprice{margin-top:20px;font:400 24px var(--head)}
+.pactions{display:flex;flex-direction:column;align-items:flex-start;gap:16px;margin-top:24px}
+.pbtn{font:400 20px var(--head);background:var(--red-deep);color:var(--yellow);border:3px solid var(--ink);border-radius:99px;padding:16px 32px;box-shadow:5px 5px 0 var(--ink);
+  cursor:pointer;transition:transform .14s var(--ease),box-shadow .14s var(--ease),background-color .15s}
+@media (hover:hover) and (pointer:fine){.pbtn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}}
+.pbtn:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--ink)}
+.pbtn.added{background:var(--ink)}
+.plink{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:16px;text-underline-offset:4px;text-decoration-thickness:2px}
+.plink:hover .ico{transform:translateX(3px)}
+.plink .ico{transition:transform .15s var(--ease)}
+.pstatus{min-height:1.4em;margin-top:12px;font-weight:700;font-size:15px}
+.pstatus a{text-underline-offset:3px}
+.pnote{margin-top:8px;font-size:14px;line-height:1.5;color:#4a4033;max-width:44ch}
+.pnote a{font-weight:700;text-underline-offset:3px}
+
+/* MORE PAIRS */
+.pmore{padding:clamp(72px,10vw,128px) var(--gut) clamp(56px,8vw,96px)}
+.pmore h2{font-size:clamp(40px,6vw,80px)}
+.prail{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:32px}
+.pcard{display:block;text-decoration:none;background:#fff;border:3px solid var(--ink);border-radius:20px;padding:8px;box-shadow:6px 6px 0 var(--ink);transition:transform .15s var(--ease),box-shadow .15s var(--ease)}
+.pcard img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:12px;background:var(--c)}
+.pcard span{display:block;padding:12px 4px 4px;font:400 20px/1.05 var(--head)}
+@media (hover:hover) and (pointer:fine){.pcard:hover{transform:translate(-2px,-2px);box-shadow:9px 9px 0 var(--ink)}}
+.pcard:focus-visible{outline-offset:4px;border-radius:20px}
+
+/* NEXT PAIR: the signature move. The next pair's colour floods the section
+   from its photo outward as you scroll in (product.js drives --flood). */
+.pnext{position:relative;height:170vh;background:var(--c)}
+.pnext-in{position:sticky;top:0;display:block;height:100vh;height:100svh;overflow:hidden;text-decoration:none;--flood:0;
+  --shot:clamp(160px,24vw,320px);--gap:clamp(24px,5vw,80px)}
+/* two identical layers: the bottom one in this pair's colours, the top one in the
+   next pair's colours, revealed by a growing circle, so text always matches its ground */
+.pnext-layer{position:absolute;inset:0;display:grid;grid-template-columns:var(--shot) minmax(0,1fr);align-items:center;gap:var(--gap);padding:0 var(--gut);color:var(--on-c)}
+.pnext-flood{background:var(--next);color:var(--on-next);clip-path:circle(calc(var(--flood) * 150%) at var(--fx,25%) var(--fy,50%))}
+.pnext-shot{width:var(--shot);height:auto;border:5px solid var(--ink);border-radius:22px;box-shadow:12px 12px 0 var(--ink);rotate:5deg;transition:rotate .3s var(--ease)}
+.pnext-copy{display:flex;flex-direction:column;gap:12px}
+.pnext-label{font-weight:700;font-size:20px}
+.pnext-name{display:flex;align-items:center;gap:.25em;font:400 clamp(56px,10vw,168px)/.9 var(--head);text-wrap:balance}
+.pnext-name .ico{width:.6em;height:.6em;stroke-width:3;transition:transform .2s var(--ease)}
+@media (hover:hover) and (pointer:fine){.pnext-in:hover .pnext-name .ico{transform:translateX(8px)}.pnext-in:hover .pnext-shot{rotate:0deg}}
+.pnext-in:focus-visible{outline:4px solid var(--ink);outline-offset:-12px}
+
+/* FOOTER */
+.pfoot{background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:32px var(--gut);font-size:14px}
+.pfoot a{font-weight:700;color:var(--yellow);text-decoration:none}
+.pfoot a:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* TABLET */
+@media (max-width:960px){
+  .prail{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* PHONE: its own composition, not the desktop one shrunk. Name on top,
+   photo with the mascot, then the buy panel; the add button sits in the first screen. */
+@media (max-width:760px){
+  .pnav{padding:12px var(--gut);gap:8px}
+  .pnav-logo img{width:44px;height:44px}
+  .pnav-links{display:none}
+  .pbag{margin-left:auto;font-size:15px}
+  .phero{grid-template-columns:1fr;min-height:0;gap:24px;padding:84px var(--gut) 48px;align-items:start}
+  .phero-word{inset:68px auto auto calc(var(--gut) - .04em);width:auto;right:var(--gut);font-size:clamp(64px,21vw,120px)}
+  .phero-visual{width:min(58vw,260px);margin-top:28px}
+  .pshot{border-width:4px;border-radius:18px;box-shadow:8px 8px 0 var(--ink)}
+  .pmascot{width:44%;left:auto;right:-36%;bottom:-4%;rotate:8deg}
+  .pbuy{max-width:none;border-width:3px;border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:20px}
+  .pbuy h1{font-size:clamp(38px,11vw,52px)}
+  .pmeta{font-size:15px;margin-top:8px}
+  .pprice{font-size:20px;margin-top:12px}
+  .pactions{margin-top:16px;gap:12px}
+  .pbtn{width:100%;font-size:19px;padding:15px 24px}
+  .prail{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;margin:24px calc(-1 * var(--gut)) 0;padding:0 var(--gut) 12px;scrollbar-width:none}
+  .prail::-webkit-scrollbar{display:none}
+  .prail li{flex:0 0 58%;scroll-snap-align:start}
+  .pcard span{font-size:18px}
+  .pnext{height:150vh}
+  .pnext-in{--shot:44vw}
+  .pnext-layer{grid-template-columns:1fr;grid-template-rows:auto auto;align-content:center;justify-items:start;gap:28px}
+
+  .pnext-name{font-size:clamp(48px,15vw,80px)}
+  .pfoot{flex-direction:column;text-align:center}
+}
+
+/* Reduced motion: no parallax, no pinned flood. The next pair shows in its own colour. */
+@media (prefers-reduced-motion:reduce){
+  .phero-word,.pshot,.pmascot{will-change:auto}
+  .pnext{height:auto}
+  .pnext-in{position:relative;min-height:70vh;--flood:1}
+  *{transition-duration:.01ms!important;animation:none!important}
+}

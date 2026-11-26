@@ -64,21 +64,8 @@ document.querySelectorAll('.track').forEach(t => {
 });
 
 /* ---------- SHOP ---------- */
-// type: 'ankle' or 'full'. price: rupees (e.g. 299) to show it; null shows "Price on DM"
-const drops = [
-  { id: 'pringles', name: 'Crunch Time', tag: 'Food fit', type: 'full', price: null },
-  { id: 'flame', name: 'Classic Fire', tag: 'Heat', type: 'full', price: null },
-  { id: 'fine', name: "Everything's Fine", tag: 'Mood', type: 'full', price: null },
-  { id: 'smiley', name: 'Emoji Overload', tag: 'Chaos', type: 'full', price: null },
-  { id: 'turtles', name: 'Pizza Power', tag: 'Cartoon', type: 'full', price: null },
-  { id: 'garfield', name: 'Lazy Cat Club', tag: 'Cartoon', type: 'full', price: null },
-  { id: 'shrimp', name: 'Shrimp Above Rest', tag: 'Food fit', type: 'full', price: null },
-  { id: 'cat', name: 'I ♥ My Cat', tag: 'Pets', type: 'full', price: null },
-  { id: 'subway', name: 'Sub Socks', tag: 'Food fit', type: 'full', price: null },
-  { id: 'dad', name: 'Bye Buddy', tag: 'Meme', type: 'full', price: null },
-];
-// bundle sizes customers can pick; price: null shows "Bundle price on DM"
-const BUNDLES = [{ size: 3, price: null }, { size: 5, price: null }];
+// the product list lives in products.js (shared with the product pages)
+const { drops, bundles: BUNDLES } = window.SMASH;
 
 const byId = Object.fromEntries(drops.map(p => [p.id, p]));
 const rupees = n => '₹' + n.toLocaleString('en-IN');
@@ -89,8 +76,8 @@ const typeLabel = { ankle: 'Ankle', full: 'Full' };
 const grid = $('shopGrid');
 grid.innerHTML = drops.map(p => `
   <article class="prod" data-type="${p.type}" data-id="${p.id}">
-    <div class="ph"><img src="img/${p.id}.jpg" alt="${esc(p.name)} socks" loading="lazy"><span class="tag">${esc(p.tag)}</span><span class="len">${typeLabel[p.type]}</span></div>
-    <div class="info"><h3>${esc(p.name)}</h3>
+    <a class="ph" href="p/${p.slug}/"><img src="img/${p.id}.jpg" alt="${esc(p.name)} socks" loading="lazy"><span class="tag">${esc(p.tag)}</span><span class="len">${typeLabel[p.type]}</span></a>
+    <div class="info"><h3><a href="p/${p.slug}/">${esc(p.name)}</a></h3>
       ${p.price ? `<p class="price">${rupees(p.price)}</p>` : `<p class="price ask">Price on DM</p>`}</div>
     <button class="add" data-id="${p.id}">Add to bag</button>
   </article>`).join('') + `<p class="shop-empty" id="shopEmpty" hidden></p>`;
@@ -263,6 +250,20 @@ $('bagOrder').addEventListener('click', () => {
   window.open(DM, '_blank', 'noopener');
 });
 
+/* links from a product page: ?bag=1 opens the bag, ?bundle=<id> starts a bundle with that pair */
+const arrival = new URLSearchParams(location.search);
+function handleArrival() {
+  const pick = arrival.get('bundle');
+  if (pick && byId[pick]) {
+    applyFilter('bundle');
+    picks = [pick]; renderPicker();
+    const shop = document.querySelector('.shop');
+    if (window.lenisRef) window.lenisRef.scrollTo(shop, { immediate: true }); else shop.scrollIntoView();
+  }
+  if (arrival.get('bag') === '1') setBag(true);
+  if (pick || arrival.has('bag')) history.replaceState(null, '', location.pathname + location.hash);
+}
+
 /* floating photos on the front page link to their pair in the shop */
 document.querySelectorAll('.sticker[data-product]').forEach(s => {
   const p = byId[s.dataset.product]; if (!p) return;
@@ -349,7 +350,7 @@ menu.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e
 }));
 
 /* ---------- INTRO: one short fade and rise, then the scroll scenes ---------- */
-const intro = gsap.timeline({ onComplete: () => { initScenes(); ScrollTrigger.refresh(); } });
+const intro = gsap.timeline({ onComplete: () => { initScenes(); ScrollTrigger.refresh(); handleArrival(); } });
 intro.from('.hero-badge, .hero-logo, .sticker, .scroll-hint', { opacity: 0, y: 16, duration: reduce ? .01 : .5, stagger: reduce ? 0 : .05, ease: 'power2.out' });
 
 /* ---------- SCROLL SCENES ---------- */
