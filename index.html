@@ -105,7 +105,19 @@
         <h2>Shop the <span>Drops</span></h2>
         <p>Add your pairs to the bag, then send the order to us on Instagram.</p>
       </div>
-      <div class="chips" id="chips" aria-label="Filter by style"></div>
+      <div class="chips" id="chips" aria-label="Filter socks"></div>
+    </div>
+    <div class="bundle-bar" id="bundleBar">
+      <div class="bb-top">
+        <div><h3>Create your bundle</h3><p>Choose a size, then tap <b>Pick</b> on the pairs you want.</p></div>
+        <div class="bsizes" id="bundleSizes" aria-label="Bundle size"></div>
+      </div>
+      <div class="bb-row">
+        <div class="bthumbs" id="bundleThumbs"></div>
+        <div class="bprog"><span id="bundleCount">0/3 picked</span><div class="bbar"><i id="bundleFill"></i></div></div>
+        <button class="link-btn" id="bundleClear">Clear</button>
+        <button class="btn bundle-add" id="bundleAdd" disabled>Add bundle to bag</button>
+      </div>
     </div>
     <div class="shop-grid" id="shopGrid"></div>
   </section>

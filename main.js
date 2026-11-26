@@ -85,79 +85,164 @@ document.querySelectorAll('.track').forEach(t => {
 });
 
 /* ---------- SHOP ---------- */
-// price: put a number in rupees (e.g. 299) to show it; null shows "Price on DM"
+// type: 'ankle' or 'full'. price: rupees (e.g. 299) to show it; null shows "Price on DM"
 const drops = [
-  { id: 'pringles', name: 'Crunch Time', tag: 'Food fit', price: null },
-  { id: 'flame', name: 'Classic Fire', tag: 'Heat', price: null },
-  { id: 'fine', name: "Everything's Fine", tag: 'Mood', price: null },
-  { id: 'smiley', name: 'Emoji Overload', tag: 'Chaos', price: null },
-  { id: 'turtles', name: 'Pizza Power', tag: 'Cartoon', price: null },
-  { id: 'garfield', name: 'Lazy Cat Club', tag: 'Cartoon', price: null },
-  { id: 'shrimp', name: 'Shrimp Above Rest', tag: 'Food fit', price: null },
-  { id: 'cat', name: 'I ♥ My Cat', tag: 'Pets', price: null },
-  { id: 'subway', name: 'Sub Socks', tag: 'Food fit', price: null },
-  { id: 'dad', name: 'Bye Buddy', tag: 'Meme', price: null },
+  { id: 'pringles', name: 'Crunch Time', tag: 'Food fit', type: 'full', price: null },
+  { id: 'flame', name: 'Classic Fire', tag: 'Heat', type: 'full', price: null },
+  { id: 'fine', name: "Everything's Fine", tag: 'Mood', type: 'full', price: null },
+  { id: 'smiley', name: 'Emoji Overload', tag: 'Chaos', type: 'full', price: null },
+  { id: 'turtles', name: 'Pizza Power', tag: 'Cartoon', type: 'full', price: null },
+  { id: 'garfield', name: 'Lazy Cat Club', tag: 'Cartoon', type: 'full', price: null },
+  { id: 'shrimp', name: 'Shrimp Above Rest', tag: 'Food fit', type: 'full', price: null },
+  { id: 'cat', name: 'I ♥ My Cat', tag: 'Pets', type: 'full', price: null },
+  { id: 'subway', name: 'Sub Socks', tag: 'Food fit', type: 'full', price: null },
+  { id: 'dad', name: 'Bye Buddy', tag: 'Meme', type: 'full', price: null },
 ];
+// bundle sizes customers can pick; price: null shows "Bundle price on DM"
+const BUNDLES = [{ size: 3, price: null }, { size: 5, price: null }];
+
 const byId = Object.fromEntries(drops.map(p => [p.id, p]));
 const rupees = n => '₹' + n.toLocaleString('en-IN');
 const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 const $ = id => document.getElementById(id);
+const typeLabel = { ankle: 'Ankle', full: 'Full' };
 
 const grid = $('shopGrid');
 grid.innerHTML = drops.map(p => `
-  <article class="prod" data-tag="${esc(p.tag)}">
-    <div class="ph"><img src="img/${p.id}.jpg" alt="${esc(p.name)} socks" loading="lazy"><span class="tag">${esc(p.tag)}</span></div>
+  <article class="prod" data-type="${p.type}" data-id="${p.id}">
+    <div class="ph"><img src="img/${p.id}.jpg" alt="${esc(p.name)} socks" loading="lazy"><span class="tag">${esc(p.tag)}</span><span class="len">${typeLabel[p.type]}</span></div>
     <div class="info"><h3>${esc(p.name)}</h3>
       ${p.price ? `<p class="price">${rupees(p.price)}</p>` : `<p class="price ask">Price on DM</p>`}</div>
     <button class="add" data-id="${p.id}">Add to bag</button>
-  </article>`).join('');
+  </article>`).join('') + `<p class="shop-empty" id="shopEmpty" hidden></p>`;
 
-const tags = ['All', ...new Set(drops.map(p => p.tag))];
+/* filters */
+const FILTERS = [
+  { key: 'all', label: 'All' },
+  { key: 'ankle', label: 'Ankle Socks' },
+  { key: 'full', label: 'Full Socks' },
+  { key: 'bundle', label: 'Create Your Bundle' },
+];
 const chips = $('chips');
-chips.innerHTML = tags.map((t, i) => `<button class="chip" aria-pressed="${i === 0}" data-tag="${esc(t)}">${esc(t)}</button>`).join('');
-chips.addEventListener('click', e => {
-  const b = e.target.closest('.chip'); if (!b) return;
-  chips.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b));
-  grid.querySelectorAll('.prod').forEach(card => { card.hidden = b.dataset.tag !== 'All' && card.dataset.tag !== b.dataset.tag; });
+chips.innerHTML = FILTERS.map((f, i) => `<button class="chip${f.key === 'bundle' ? ' chip-bundle' : ''}" aria-pressed="${i === 0}" data-key="${f.key}">${f.label}</button>`).join('');
+let mode = 'all';
+function applyFilter(key) {
+  mode = key;
+  chips.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.key === key)));
+  let shown = 0;
+  grid.querySelectorAll('.prod').forEach(card => {
+    const show = key === 'all' || key === 'bundle' || card.dataset.type === key;
+    card.hidden = !show; if (show) shown++;
+  });
+  const empty = $('shopEmpty');
+  empty.hidden = shown > 0;
+  if (!shown) empty.innerHTML = `<b>${key === 'ankle' ? 'Ankle socks' : 'These'} are dropping soon.</b> Check out <button class="link-btn" data-go="full">Full Socks</button> for now.`;
+  document.querySelector('.shop').classList.toggle('bundling', key === 'bundle');
+  renderPicker();
   ScrollTrigger.refresh();
-});
+}
+chips.addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) applyFilter(b.dataset.key); });
+grid.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) applyFilter(g.dataset.go); });
 
-/* bag: kept in this browser only */
+/* bundle picker */
+let bundleSize = BUNDLES[0].size;
+let picks = [];
+const bundleInfo = n => BUNDLES.find(b => b.size === n);
+$('bundleSizes').innerHTML = BUNDLES.map(b => `<button class="bsize" data-size="${b.size}">${b.size} pairs${b.price ? ' · ' + rupees(b.price) : ''}</button>`).join('');
+$('bundleSizes').addEventListener('click', e => {
+  const b = e.target.closest('.bsize'); if (!b) return;
+  bundleSize = +b.dataset.size;
+  picks = picks.slice(0, bundleSize);
+  renderPicker();
+});
+function renderPicker() {
+  $('bundleSizes').querySelectorAll('.bsize').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.size === bundleSize)));
+  $('bundleCount').textContent = `${picks.length}/${bundleSize} picked`;
+  $('bundleFill').style.transform = `scaleX(${picks.length / bundleSize})`;
+  $('bundleAdd').disabled = picks.length !== bundleSize;
+  $('bundleThumbs').innerHTML = Array.from({ length: bundleSize }, (_, i) =>
+    picks[i] ? `<img src="img/${picks[i]}.jpg" alt="${esc(byId[picks[i]].name)}">` : `<span></span>`).join('');
+  const full = picks.length >= bundleSize;
+  grid.querySelectorAll('.add').forEach(btn => {
+    if (mode === 'bundle') {
+      const picked = picks.includes(btn.dataset.id);
+      btn.textContent = picked ? 'Picked ✓' : 'Pick';
+      btn.classList.toggle('added', picked);
+      btn.disabled = !picked && full;
+    } else {
+      btn.textContent = 'Add to bag'; btn.classList.remove('added'); btn.disabled = false;
+    }
+  });
+}
+
+/* bag: kept in this browser only. Keys are a product id, or "b<size>:id,id,id" for a bundle */
 let bag = {};
 try { bag = JSON.parse(localStorage.getItem('smashBag') || '{}') || {}; } catch (e) { bag = {}; }
-for (const id in bag) if (!byId[id] || !(bag[id] > 0)) delete bag[id];
+const parseBundle = key => {
+  const m = /^b(\d+):(.+)$/.exec(key); if (!m) return null;
+  const ids = m[2].split(','); const size = +m[1];
+  return ids.length === size && ids.every(id => byId[id]) && bundleInfo(size) ? { size, ids } : null;
+};
+for (const k in bag) if (!(bag[k] > 0) || !(byId[k] || parseBundle(k))) delete bag[k];
 const save = () => { try { localStorage.setItem('smashBag', JSON.stringify(bag)); } catch (e) {} };
 const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 3500); };
-const pairCount = () => Object.values(bag).reduce((s, n) => s + n, 0);
-const allPriced = ids => ids.length > 0 && ids.every(id => byId[id].price);
-const totalOf = ids => ids.reduce((s, id) => s + bag[id] * byId[id].price, 0);
+
+function item(key) {
+  const b = parseBundle(key);
+  if (b) {
+    const price = bundleInfo(b.size).price;
+    return { name: `Bundle of ${b.size}`, img: b.ids[0], pairs: b.size, price,
+             detail: b.ids.map(id => byId[id].name).join(', '), each: price ? rupees(price) + ' per bundle' : 'Bundle price on DM' };
+  }
+  const p = byId[key];
+  return { name: p.name, img: key, pairs: 1, price: p.price, detail: typeLabel[p.type] + ' socks', each: p.price ? rupees(p.price) + ' each' : 'Price on DM' };
+}
+const pairCount = () => Object.keys(bag).reduce((s, k) => s + bag[k] * item(k).pairs, 0);
+const allPriced = keys => keys.length > 0 && keys.every(k => item(k).price);
+const totalOf = keys => keys.reduce((s, k) => s + bag[k] * item(k).price, 0);
 
 function renderBag() {
-  const ids = Object.keys(bag);
+  const keys = Object.keys(bag);
   const pairs = pairCount();
   $('bagCount').textContent = pairs;
   $('bagPairs').textContent = pairs + (pairs === 1 ? ' pair' : ' pairs');
-  $('bagTotal').textContent = allPriced(ids) ? rupees(totalOf(ids)) : (ids.length ? 'Price on DM' : '');
+  $('bagTotal').textContent = allPriced(keys) ? rupees(totalOf(keys)) : (keys.length ? 'Price on DM' : '');
   $('bagOrder').disabled = !pairs;
-  $('bagItems').innerHTML = ids.length ? ids.map(id => {
-    const p = byId[id];
+  $('bagItems').innerHTML = keys.length ? keys.map(k => {
+    const it = item(k);
     return `<div class="bag-line">
-      <img src="img/${id}.jpg" alt="">
-      <div><h4>${esc(p.name)}</h4><p class="lp">${p.price ? rupees(p.price) + ' each' : 'Price on DM'}</p><button class="rm" data-rm="${id}">Remove</button></div>
-      <div class="qty"><button data-dec="${id}" aria-label="One less ${esc(p.name)}">−</button><span>${bag[id]}</span><button data-inc="${id}" aria-label="One more ${esc(p.name)}">+</button></div>
+      <img src="img/${it.img}.jpg" alt="">
+      <div><h4>${esc(it.name)}</h4><p class="lp">${esc(it.detail)}</p><p class="lp">${it.each}</p><button class="rm" data-rm="${k}">Remove</button></div>
+      <div class="qty"><button data-dec="${k}" aria-label="One less ${esc(it.name)}">−</button><span>${bag[k]}</span><button data-inc="${k}" aria-label="One more ${esc(it.name)}">+</button></div>
     </div>`;
   }).join('') : `<p class="bag-empty"><b>Bag's empty.</b>Boring. Go add some loud socks.</p>`;
 }
 renderBag();
+renderPicker();
 
+const bump = () => { const bb = $('bagBtn'); bb.classList.remove('bump'); void bb.offsetWidth; bb.classList.add('bump'); };
 grid.addEventListener('click', e => {
   const b = e.target.closest('.add'); if (!b) return;
-  bag[b.dataset.id] = (bag[b.dataset.id] || 0) + 1;
-  save(); renderBag();
+  const id = b.dataset.id;
+  if (mode === 'bundle') {
+    picks = picks.includes(id) ? picks.filter(x => x !== id) : picks.length < bundleSize ? [...picks, id] : picks;
+    renderPicker();
+    return;
+  }
+  bag[id] = (bag[id] || 0) + 1;
+  save(); renderBag(); bump();
   b.textContent = 'Added ✓'; b.classList.add('added');
-  clearTimeout(b._h); b._h = setTimeout(() => { b.textContent = 'Add to bag'; b.classList.remove('added'); }, 1200);
-  const bb = $('bagBtn'); bb.classList.remove('bump'); void bb.offsetWidth; bb.classList.add('bump');
+  clearTimeout(b._h); b._h = setTimeout(() => { if (mode !== 'bundle') { b.textContent = 'Add to bag'; b.classList.remove('added'); } }, 1200);
 });
+$('bundleAdd').addEventListener('click', () => {
+  if (picks.length !== bundleSize) return;
+  const key = `b${bundleSize}:${picks.join(',')}`;
+  bag[key] = (bag[key] || 0) + 1;
+  save(); renderBag(); bump();
+  toast(`Bundle of ${bundleSize} added to your bag!`);
+  picks = []; renderPicker();
+});
+$('bundleClear').addEventListener('click', () => { picks = []; renderPicker(); });
 $('bagItems').addEventListener('click', e => {
   const t = e.target.closest('button'); if (!t) return;
   const { inc, dec, rm } = t.dataset;
@@ -187,9 +272,12 @@ async function copyText(text) {
   ta.remove(); return ok;
 }
 $('bagOrder').addEventListener('click', () => {
-  const ids = Object.keys(bag); if (!ids.length) return;
-  const lines = ids.map(id => `• ${byId[id].name} x${bag[id]}`).join('\n');
-  const total = allPriced(ids) ? `\nTotal: ${rupees(totalOf(ids))}` : '';
+  const keys = Object.keys(bag); if (!keys.length) return;
+  const lines = keys.map(k => {
+    const it = item(k);
+    return parseBundle(k) ? `• ${it.name} x${bag[k]} (${it.detail})` : `• ${it.name} (${it.detail}) x${bag[k]}`;
+  }).join('\n');
+  const total = allPriced(keys) ? `\nTotal: ${rupees(totalOf(keys))}` : '';
   const msg = `SMASH! Hi Smash Store, I'd like to order:\n${lines}\nPairs: ${pairCount()}${total}`;
   // copy first (needs the click), then open the DM in a new tab
   copyText(msg).then(ok => toast(ok ? 'Order copied! Paste it in the Instagram DM.' : 'Send us your order in the Instagram DM.'));
