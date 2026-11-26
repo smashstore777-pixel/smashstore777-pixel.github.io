@@ -42,21 +42,6 @@ function sockSVG({ base = '#fff6e0', cuff = '#E8201A', heel = '#0d0d0d', layers 
 }
 
 /* ---------- HERO: socks on the line ---------- */
-const hanging = document.getElementById('hanging');
-const hangSet = [
-  { x: 9, y: 9, layers: ['stripes'], cuff: '#0d0d0d', heel: '#E8201A' },
-  { x: 27, y: 15, layers: ['smile'], cuff: '#0d0d0d', heel: '#0d0d0d' },
-  { x: 66, y: 15, layers: ['fire'], cuff: '#fff6e0', heel: '#0d0d0d' },
-  { x: 84, y: 9, layers: ['stripes', 'smile'], cuff: '#E8201A', heel: '#E8201A' },
-];
-hangSet.forEach((s, i) => {
-  const d = document.createElement('div');
-  d.className = 'hang';
-  d.style.left = s.x + '%';
-  d.style.top = `calc(70px + ${s.y}px)`;
-  d.innerHTML = `<div class="swing" style="animation-delay:${-i * 0.7}s"><span class="pin"></span>${sockSVG(s)}</div>`;
-  hanging.appendChild(d);
-});
 
 /* split text into chars */
 document.querySelectorAll('[data-split]').forEach(el => {
@@ -136,7 +121,7 @@ function applyFilter(key) {
   });
   const empty = $('shopEmpty');
   empty.hidden = shown > 0;
-  if (!shown) empty.innerHTML = `<b>${key === 'ankle' ? 'Ankle socks' : 'These'} are dropping soon.</b> Check out <button class="link-btn" data-go="full">Full Socks</button> for now.`;
+  if (!shown) empty.innerHTML = `<img class="empty-mascot" src="img/mascot.png" alt=""><b>${key === 'ankle' ? 'Ankle socks' : 'These'} are dropping soon.</b> Check out <button class="link-btn" data-go="full">Full Socks</button> for now.`;
   document.querySelector('.shop').classList.toggle('bundling', key === 'bundle');
   renderPicker();
   ScrollTrigger.refresh();
@@ -215,7 +200,7 @@ function renderBag() {
       <div><h4>${esc(it.name)}</h4><p class="lp">${esc(it.detail)}</p><p class="lp">${it.each}</p><button class="rm" data-rm="${k}">Remove</button></div>
       <div class="qty"><button data-dec="${k}" aria-label="One less ${esc(it.name)}">−</button><span>${bag[k]}</span><button data-inc="${k}" aria-label="One more ${esc(it.name)}">+</button></div>
     </div>`;
-  }).join('') : `<p class="bag-empty"><b>Bag's empty.</b>Boring. Go add some loud socks.</p>`;
+  }).join('') : `<p class="bag-empty"><img class="empty-mascot" src="img/mascot.png" alt=""><b>Bag's empty.</b>Boring. Go add some loud socks.</p>`;
 }
 renderBag();
 renderPicker();
@@ -367,8 +352,8 @@ const intro = gsap.timeline({ paused: true, onComplete: () => {
 intro
   .from('.hero-badge', { scale: 0, rotate: -270, duration: 1, ease: 'back.out(1.8)' })
   .from('.hero-title .row:first-child .ch', { yPercent: 120, rotate: () => gsap.utils.random(-30, 30), opacity: 0, stagger: .06, duration: .9, ease: 'back.out(2)' })
-  .from('.hero-title .row.small .ch', { yPercent: 100, opacity: 0, stagger: .025, duration: .6, ease: 'back.out(2)' }, '-=.6')
-  .from('.hang', { y: -300, stagger: .1, duration: 1, ease: 'bounce.out' }, '-=1')
+  .from('.hero-title .row.small .ch', { yPercent: 100, opacity: 0, stagger: .05, duration: .6, ease: 'back.out(2)' }, '-=.6')
+  .from('.hero-mascot', { y: -260, rotate: -30, opacity: 0, duration: .9, ease: 'bounce.out' }, '-=.5')
   .from('.sticker', { scale: 0, rotate: 40, stagger: .08, duration: .7, ease: 'back.out(2)' }, '-=.8')
   .from('.hero-sub, .scroll-hint, .nav', { opacity: 0, y: 20, duration: .5 }, '-=.4');
 
@@ -416,8 +401,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     .fromTo('.hero-title .row.small', { y: 0, opacity: 1 }, { ...nr, y: () => -innerHeight * .25, opacity: 0, duration: 1.4, ease: 'power2.in' }, .15)
     .fromTo('.hero-badge', { y: 0, rotate: 0, opacity: 1 }, { ...nr, y: () => -innerHeight * .45, rotate: 180, opacity: 0, duration: 1.4, ease: 'power2.in' }, 0)
     .fromTo('.hero-sub, .scroll-hint', { y: 0, opacity: 1 }, { ...nr, y: -40, opacity: 0, duration: .6 }, 0)
-    .fromTo('.hang', { y: 0, rotate: 0 }, { ...nr, y: () => innerHeight * 1.2, rotate: i => [-40, 30, -25, 45][i % 4], stagger: .1, duration: 1.4, ease: 'power2.in' }, .2)
-    .to('.line path', { attr: { d: 'M-20 20 Q500 420 1020 20' }, duration: 1.2 }, .2)
+    .fromTo('.hero-mascot', { y: 0, x: 0, rotate: 0, opacity: 1 }, { ...nr, y: () => -innerHeight * .5, x: 120, rotate: 35, opacity: 0, duration: 1.2, ease: 'back.in(1.6)' }, 0)
     .fromTo('.sticker', { y: 0, rotate: 0 }, { ...nr, y: i => -innerHeight * (0.7 + i * .15), rotate: i => (i % 2 ? 40 : -40), duration: 1.6, ease: 'power2.in' }, 0)
     .fromTo('.hero-dark', { y: 0, yPercent: 100 }, { ...nr, y: 0, yPercent: 0, duration: 1.1, ease: 'power2.inOut' }, .9)
     // 2. a plain sock drops in, the steps appear
