@@ -67,7 +67,17 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
   text-shadow:4px 4px 0 var(--ink)}
 /* the real logo is the title; sized by width and height so it never crowds the badge */
 .hero-logo{display:block;width:min(84vw,118vh,1000px);height:auto;will-change:transform;filter:drop-shadow(5px 5px 0 rgba(13,13,13,.9))}
-.sticker{position:absolute;will-change:transform;width:clamp(110px,13vw,190px);border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 var(--ink);z-index:1}
+/* floating product photos: each is a link to that pair in the shop */
+.sticker{position:absolute;display:block;will-change:transform;width:clamp(110px,13vw,190px);border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 var(--ink);z-index:1;background:#fff;
+  transition:scale .25s cubic-bezier(.3,1.6,.5,1),box-shadow .2s}
+.sticker img{display:block;width:100%;border-radius:14px}
+.sticker:hover,.sticker:focus-visible{scale:1.08;box-shadow:12px 12px 0 var(--ink);z-index:7}
+.stk-tag{position:absolute;left:50%;bottom:-16px;translate:-50% 0;white-space:nowrap;font-family:var(--head);font-size:clamp(12px,1.1vw,16px);line-height:1;
+  color:var(--yellow);background:var(--red);border:3px solid var(--ink);border-radius:99px;padding:7px 12px 6px;box-shadow:3px 3px 0 var(--ink)}
+.stk-tag b{font-weight:400;color:#fff}
+/* the pair you tapped gets a quick spotlight in the shop */
+.prod.spot{animation:spot 1.8s ease-out}
+@keyframes spot{0%,40%{box-shadow:0 0 0 6px var(--red),10px 10px 0 var(--ink);transform:translateY(-6px) scale(1.03)}100%{box-shadow:6px 6px 0 var(--ink);transform:none}}
 .s1{left:5vw;top:38vh;rotate:-10deg}
 .s2{right:5vw;top:34vh;rotate:9deg}
 .s3{left:3vw;bottom:-8vh;rotate:7deg}
@@ -273,7 +283,10 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 @media(max-width:700px){
   .hero{padding:110px 4vw 165px}
   .hero-badge{width:118px}
-  .sticker{width:88px}
+  .sticker{width:88px;border-width:3px;border-radius:14px;box-shadow:5px 5px 0 var(--ink)}
+  .sticker img{border-radius:11px}
+  .stk-tag{font-size:10px;padding:5px 8px 4px;border-width:2px;bottom:-13px}
+  .stk-tag b{display:none}
   .s1{bottom:7vh;left:5vw}.s2{bottom:9vh;right:5vw}
 }
 

@@ -269,6 +269,21 @@ $('bagOrder').addEventListener('click', () => {
   window.open(DM, '_blank', 'noopener');
 });
 
+/* floating photos on the front page link to their pair in the shop */
+document.querySelectorAll('.sticker[data-product]').forEach(s => {
+  const p = byId[s.dataset.product]; if (!p) return;
+  s.setAttribute('aria-label', `Shop ${p.name} socks`);
+  s.querySelector('.stk-tag').innerHTML = `${esc(p.name)} <b>→</b>`;
+  s.addEventListener('click', e => {
+    e.preventDefault(); e.stopImmediatePropagation();
+    applyFilter('all');
+    const card = grid.querySelector(`.prod[data-id="${p.id}"]`);
+    const spot = () => { card.classList.remove('spot'); void card.offsetWidth; card.classList.add('spot'); };
+    if (window.lenisRef) window.lenisRef.scrollTo(card, { offset: -130, duration: 1.6, onComplete: spot });
+    else { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(spot, 700); }
+  });
+});
+
 /* ---------- CTA rain ---------- */
 const rain = document.getElementById('rain');
 drops.forEach(({ id }, i) => {
