@@ -351,11 +351,9 @@ const intro = gsap.timeline({ paused: true, onComplete: () => {
 }});
 intro
   .from('.hero-badge', { scale: 0, rotate: -270, duration: 1, ease: 'back.out(1.8)' })
-  .from('.hero-title .row:first-child .ch', { yPercent: 120, rotate: () => gsap.utils.random(-30, 30), opacity: 0, stagger: .06, duration: .9, ease: 'back.out(2)' })
-  .from('.hero-title .row.small .ch', { yPercent: 100, opacity: 0, stagger: .05, duration: .6, ease: 'back.out(2)' }, '-=.6')
-  .from('.hero-mascot', { y: -260, rotate: -30, opacity: 0, duration: .9, ease: 'bounce.out' }, '-=.5')
+  .from('.hero-logo', { scale: .3, rotate: -10, opacity: 0, duration: 1, ease: 'back.out(2.2)' }, '-=.6')
   .from('.sticker', { scale: 0, rotate: 40, stagger: .08, duration: .7, ease: 'back.out(2)' }, '-=.8')
-  .from('.hero-sub, .scroll-hint, .nav', { opacity: 0, y: 20, duration: .5 }, '-=.4');
+  .from('.scroll-hint, .nav', { opacity: 0, y: 20, duration: .5 }, '-=.4');
 
 gsap.to(counter, {
   v: 100, duration: reduce ? .2 : .8, ease: 'power2.inOut',
@@ -397,11 +395,9 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   const nr = { immediateRender: false };
   tl
     // 1. the front page clears away
-    .fromTo('.hero-title .row:first-child', { y: 0, scale: 1, opacity: 1 }, { ...nr, y: () => -innerHeight * .35, scale: 1.15, opacity: 0, duration: 1.6, ease: 'power2.in' }, 0)
-    .fromTo('.hero-title .row.small', { y: 0, opacity: 1 }, { ...nr, y: () => -innerHeight * .25, opacity: 0, duration: 1.4, ease: 'power2.in' }, .15)
+    .fromTo('.hero-logo', { y: 0, scale: 1, opacity: 1 }, { ...nr, y: () => -innerHeight * .35, scale: 1.15, opacity: 0, duration: 1.6, ease: 'power2.in' }, 0)
     .fromTo('.hero-badge', { y: 0, rotate: 0, opacity: 1 }, { ...nr, y: () => -innerHeight * .45, rotate: 180, opacity: 0, duration: 1.4, ease: 'power2.in' }, 0)
-    .fromTo('.hero-sub, .scroll-hint', { y: 0, opacity: 1 }, { ...nr, y: -40, opacity: 0, duration: .6 }, 0)
-    .fromTo('.hero-mascot', { y: 0, x: 0, rotate: 0, opacity: 1 }, { ...nr, y: () => -innerHeight * .5, x: 120, rotate: 35, opacity: 0, duration: 1.2, ease: 'back.in(1.6)' }, 0)
+    .fromTo('.scroll-hint', { y: 0, opacity: 1 }, { ...nr, y: -40, opacity: 0, duration: .6 }, 0)
     .fromTo('.sticker', { y: 0, rotate: 0 }, { ...nr, y: i => -innerHeight * (0.7 + i * .15), rotate: i => (i % 2 ? 40 : -40), duration: 1.6, ease: 'power2.in' }, 0)
     .fromTo('.hero-dark', { y: 0, yPercent: 100 }, { ...nr, y: 0, yPercent: 0, duration: 1.1, ease: 'power2.inOut' }, .9)
     // 2. a plain sock drops in, the steps appear
