@@ -368,7 +368,7 @@ intro
   .from('.hero-badge', { scale: 0, rotate: -270, duration: 1, ease: 'back.out(1.8)' })
   .from('.hero-logo', { scale: .3, rotate: -10, opacity: 0, duration: 1, ease: 'back.out(2.2)' }, '-=.6')
   .from('.sticker', { scale: 0, rotate: 40, stagger: .08, duration: .7, ease: 'back.out(2)' }, '-=.8')
-  .from('.scroll-hint, .nav, .hero-cta', { opacity: 0, y: 20, duration: .5 }, '-=.4');
+  .from('.scroll-hint, .nav', { opacity: 0, y: 20, duration: .5 }, '-=.4');
 
 gsap.to(counter, {
   v: 100, duration: reduce ? .2 : .8, ease: 'power2.inOut',
@@ -412,7 +412,7 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     // 1. the front page clears away
     .fromTo('.hero-logo', { y: 0, scale: 1, opacity: 1 }, { ...nr, y: () => -innerHeight * .35, scale: 1.15, opacity: 0, duration: 1.6, ease: 'power2.in' }, 0)
     .fromTo('.hero-badge', { y: 0, rotate: 0, opacity: 1 }, { ...nr, y: () => -innerHeight * .45, rotate: 180, opacity: 0, duration: 1.4, ease: 'power2.in' }, 0)
-    .fromTo('.scroll-hint, .hero-cta', { y: 0, opacity: 1 }, { ...nr, y: -40, opacity: 0, duration: .6 }, 0)
+    .fromTo('.scroll-hint', { y: 0, opacity: 1 }, { ...nr, y: -40, opacity: 0, duration: .6 }, 0)
     .fromTo('.sticker', { y: 0, rotate: 0 }, { ...nr, y: i => -innerHeight * (0.7 + i * .15), rotate: i => (i % 2 ? 40 : -40), duration: 1.6, ease: 'power2.in' }, 0)
     .fromTo('.hero-dark', { y: 0, yPercent: 100 }, { ...nr, y: 0, yPercent: 0, duration: 1.1, ease: 'power2.inOut' }, .9)
     // 2. a plain sock drops in, the steps appear

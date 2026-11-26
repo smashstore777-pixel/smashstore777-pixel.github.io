@@ -82,16 +82,7 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 .s2{right:5vw;top:34vh;rotate:9deg}
 .s3{left:3vw;bottom:-8vh;rotate:7deg}
 .s4{right:3vw;bottom:-10vh;rotate:-8deg}
-.hero-cta{display:none}
-@media(max-width:700px){
-  .sticker,.hero-badge{display:none}
-  .hero-cta{display:flex;flex-direction:column;align-items:center;gap:18px;position:relative;z-index:4;margin-top:4px}
-  .peek{display:flex;align-items:center;gap:10px}
-  .peek img{width:96px;animation:bob 1.6s ease-in-out infinite}
-  .bubble{position:relative;font-family:var(--head);font-size:16px;line-height:1.1;background:#fff;border:3px solid var(--ink);border-radius:16px;padding:9px 12px;box-shadow:3px 3px 0 var(--ink);max-width:150px}
-  .bubble::before{content:"";position:absolute;left:-11px;top:50%;margin-top:-8px;border:8px solid transparent;border-right-color:var(--ink);border-left:0}
-  .hero-shop{font-size:20px;padding:16px 30px}
-}
+@media(max-width:700px){.s3,.s4{display:none}.s1{top:auto;bottom:4vh}.s2{top:auto;bottom:6vh}}
 .scroll-hint{position:absolute;bottom:3vh;left:50%;translate:-50% 0;z-index:4;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.25em;text-transform:uppercase}
 .scroll-hint i{width:2px;height:34px;background:var(--ink);transform-origin:top;animation:drip 1.4s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
@@ -287,10 +278,10 @@ html.sock-cursor, html.sock-cursor *{cursor:none!important}
 @media(max-width:600px){.footer{flex-direction:column;text-align:center}}
 
 @media (prefers-reduced-motion:reduce){
-  .hero-badge img,.hero-badge .ring,.peek img,.loader-logo,.scroll-hint i,.empty-mascot{animation:none}
+  .hero-badge img,.hero-badge .ring,.loader-logo,.scroll-hint i,.empty-mascot{animation:none}
 }
 @media(max-width:700px){
-  .hero{padding:96px 4vw 90px}
+  .hero{padding:110px 4vw 165px}
   .hero-badge{width:118px}
   .sticker{width:88px;border-width:3px;border-radius:14px;box-shadow:5px 5px 0 var(--ink)}
   .sticker img{border-radius:11px}
