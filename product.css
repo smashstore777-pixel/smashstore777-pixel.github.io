@@ -3,7 +3,8 @@
    Each page sets --c (the pair's colour) and --on-c (text that reads on it). */
 :root{
   --yellow:#FFE500; --red:#E8201A; --ink:#0d0d0d; --cream:#FFF6E0;
-  --red-deep:#C2140E; /* brand red, one step deeper, so yellow text on it clears 4.5:1 */
+  --red-deep:#C2140E;
+  --white:#FFFDF8; --ink-soft:#4a4033; --shade:rgba(13,13,13,.9); --rule:rgba(13,13,13,.25); /* brand red, one step deeper, so yellow text on it clears 4.5:1 */
   --head:'Bagel Fat One', system-ui, sans-serif;
   --body:'Space Grotesk', system-ui, sans-serif;
   --ease:cubic-bezier(.23,1,.32,1);
@@ -11,23 +12,27 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scrollbar-color:var(--ink) var(--cream);-webkit-text-size-adjust:100%}
-body{font-family:var(--body);background:var(--cream);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased;caret-color:var(--red)}
+html,body{overflow-x:clip}
+body{font-family:var(--body);background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;caret-color:var(--red)}
 ::selection{background:var(--ink);color:var(--yellow)}
 img{display:block;max-width:100%}
 a{color:inherit}
-h1,h2{font-family:var(--head);font-weight:400;line-height:.95;text-wrap:balance}
+h1,h2{font-family:var(--head);font-weight:400;line-height:.95;text-wrap:balance;overflow-wrap:break-word;min-width:0}
+.skip{position:fixed;left:16px;top:-80px;z-index:50;background:var(--ink);color:var(--yellow);font-weight:700;text-decoration:none;padding:12px 16px;border-radius:12px}
+.skip:focus{top:16px}
 .ico{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 :focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 
 /* NAV */
 .pnav{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:16px;padding:16px var(--gut)}
-.pnav-logo img{width:56px;height:56px;transition:transform .18s var(--ease)}
-@media (hover:hover) and (pointer:fine){.pnav-logo:hover img{transform:rotate(-8deg)}}
+.pnav-logo{display:block;transition:transform .18s var(--ease)}
+.pnav-logo img{width:56px;height:56px}
+@media (hover:hover) and (pointer:fine){.pnav-logo:hover{transform:rotate(-8deg)}}
 .pnav-links{display:flex;gap:4px;background:var(--ink);padding:4px;border-radius:99px;margin-left:auto}
-.pnav-links a{color:var(--cream);font-weight:700;font-size:14px;text-decoration:none;padding:8px 16px;border-radius:99px;transition:background-color .15s,color .15s}
+.pnav-links a{display:inline-flex;align-items:center;min-height:40px;color:var(--cream);font-weight:700;font-size:14px;text-decoration:none;padding:8px 16px;border-radius:99px;transition:background-color .15s,color .15s}
 .pnav-links a:hover{background:var(--yellow);color:var(--ink)}
 .pnav-links a:focus-visible{outline-color:var(--yellow)}
-.pbag{display:flex;align-items:center;gap:8px;font:400 16px var(--head);text-decoration:none;background:var(--ink);color:var(--yellow);border:3px solid var(--ink);border-radius:99px;padding:8px 8px 8px 14px;transition:transform .12s var(--ease)}
+.pbag{display:flex;align-items:center;min-height:48px;gap:8px;font:400 16px var(--head);text-decoration:none;background:var(--ink);color:var(--yellow);border:3px solid var(--ink);border-radius:99px;padding:8px 8px 8px 16px;transition:transform .12s var(--ease)}
 .pbag .ico{width:18px;height:18px}
 .pbag b{display:grid;place-items:center;min-width:28px;height:28px;padding:0 8px;border-radius:99px;background:var(--red-deep);color:var(--yellow);font-weight:400;font-variant-numeric:tabular-nums}
 .pbag:active{transform:translateY(1px)}
@@ -41,16 +46,16 @@ h1,h2{font-family:var(--head);font-weight:400;line-height:.95;text-wrap:balance}
   padding:120px var(--gut) 72px}
 .phero-word{position:absolute;inset:auto auto 32px calc(var(--gut) - .04em);width:min(72vw,1100px);z-index:0;pointer-events:none;
   font-family:var(--head);font-size:clamp(88px,13vw,220px);line-height:.86;letter-spacing:-.02em;text-transform:uppercase;
-  color:color-mix(in srgb,var(--c) 74%,var(--ink));will-change:transform}
+  color:color-mix(in srgb,var(--c) 74%,var(--ink))}
 .phero-visual{position:relative;z-index:1;justify-self:center;width:min(100%,420px)}
-.pshot{position:relative;border:5px solid var(--ink);border-radius:24px;overflow:hidden;background:#fff;box-shadow:14px 14px 0 var(--ink);rotate:-4deg;will-change:transform}
+.pshot{position:relative;border:5px solid var(--ink);border-radius:24px;overflow:hidden;background:var(--white);box-shadow:14px 14px 0 var(--ink);rotate:-4deg;will-change:transform}
 .pshot img{width:100%;height:auto}
-.pmascot{position:absolute;z-index:2;width:38%;height:auto;left:-20%;bottom:-8%;rotate:-10deg;filter:drop-shadow(6px 6px 0 rgba(13,13,13,.9));will-change:transform}
+.pmascot{position:absolute;z-index:2;width:38%;height:auto;left:-20%;bottom:-8%;rotate:-10deg;filter:drop-shadow(6px 6px 0 var(--shade));will-change:transform}
 
 .pbuy{position:relative;z-index:3;align-self:center;background:var(--cream);color:var(--ink);border:4px solid var(--ink);border-radius:24px;box-shadow:10px 10px 0 var(--ink);
   padding:clamp(24px,3vw,40px);max-width:520px}
 .pbuy h1{font-size:clamp(44px,5.4vw,84px);color:var(--ink)}
-.pmeta{margin-top:12px;font-weight:500;font-size:17px;color:#4a4033}
+.pmeta{margin-top:12px;font-weight:500;font-size:17px;color:var(--ink-soft)}
 .pprice{margin-top:20px;font:400 24px var(--head)}
 .pactions{display:flex;flex-direction:column;align-items:flex-start;gap:16px;margin-top:24px}
 .pbtn{font:400 20px var(--head);background:var(--red-deep);color:var(--yellow);border:3px solid var(--ink);border-radius:99px;padding:16px 32px;box-shadow:5px 5px 0 var(--ink);
@@ -58,13 +63,13 @@ h1,h2{font-family:var(--head);font-weight:400;line-height:.95;text-wrap:balance}
 @media (hover:hover) and (pointer:fine){.pbtn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--ink)}}
 .pbtn:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--ink)}
 .pbtn.added{background:var(--ink)}
-.plink{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:16px;text-underline-offset:4px;text-decoration-thickness:2px}
+.plink{display:inline-flex;align-items:center;min-height:44px;gap:8px;font-weight:700;font-size:16px;text-underline-offset:4px;text-decoration-thickness:2px}
 .plink:hover .ico{transform:translateX(3px)}
 .plink .ico{transition:transform .15s var(--ease)}
 /* SHARE */
-.pshare{position:relative;margin-top:20px;padding-top:20px;border-top:2px dashed rgba(13,13,13,.25)}
+.pshare{position:relative;margin-top:20px;padding-top:20px;border-top:2px dashed var(--rule)}
 .pshare-btn,.pshare-menu button,.pshare-menu a{display:inline-flex;align-items:center;gap:8px;font:700 15px var(--body);color:var(--ink);text-decoration:none;
-  background:#fff;border:2px solid var(--ink);border-radius:99px;padding:10px 16px;cursor:pointer;transition:background-color .15s,transform .12s var(--ease)}
+  background:transparent;min-height:44px;border:2px solid var(--ink);border-radius:99px;padding:8px 16px;cursor:pointer;transition:background-color .15s,transform .12s var(--ease)}
 .pshare-btn .ico,.pshare-menu .ico{width:18px;height:18px}
 @media (hover:hover) and (pointer:fine){.pshare-btn:hover,.pshare-menu button:hover,.pshare-menu a:hover{background:var(--yellow)}}
 .pshare-btn:active,.pshare-menu button:active,.pshare-menu a:active{transform:translateY(1px)}
@@ -73,14 +78,14 @@ h1,h2{font-family:var(--head);font-weight:400;line-height:.95;text-wrap:balance}
 .pshare-menu[hidden]{display:none}
 .pstatus{min-height:1.4em;margin-top:12px;font-weight:700;font-size:15px}
 .pstatus a{text-underline-offset:3px}
-.pnote{margin-top:8px;font-size:14px;line-height:1.5;color:#4a4033;max-width:44ch}
+.pnote{margin-top:8px;font-size:14px;line-height:1.5;color:var(--ink-soft);max-width:44ch}
 .pnote a{font-weight:700;text-underline-offset:3px}
 
 /* MORE PAIRS */
 .pmore{padding:clamp(72px,10vw,128px) var(--gut) clamp(56px,8vw,96px)}
 .pmore h2{font-size:clamp(40px,6vw,80px)}
 .prail{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:32px}
-.pcard{display:block;text-decoration:none;background:#fff;border:3px solid var(--ink);border-radius:20px;padding:8px;box-shadow:6px 6px 0 var(--ink);transition:transform .15s var(--ease),box-shadow .15s var(--ease)}
+.pcard{display:block;text-decoration:none;background:var(--white);border:3px solid var(--ink);border-radius:20px;padding:8px;box-shadow:6px 6px 0 var(--ink);transition:transform .15s var(--ease),box-shadow .15s var(--ease)}
 .pcard img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:12px;background:var(--c)}
 .pcard span{display:block;padding:12px 4px 4px;font:400 20px/1.05 var(--head)}
 @media (hover:hover) and (pointer:fine){.pcard:hover{transform:translate(-2px,-2px);box-shadow:9px 9px 0 var(--ink)}}
@@ -120,7 +125,7 @@ h1,h2{font-family:var(--head);font-weight:400;line-height:.95;text-wrap:balance}
   .pnav-logo img{width:44px;height:44px}
   .pnav-links{display:none}
   .pbag{margin-left:auto;font-size:15px}
-  .phero{grid-template-columns:1fr;min-height:0;gap:24px;padding:84px var(--gut) 48px;align-items:start}
+  .phero{grid-template-columns:minmax(0,1fr);min-height:0;gap:24px;padding:84px var(--gut) 48px;align-items:start}
   .phero-word{inset:68px auto auto calc(var(--gut) - .04em);width:auto;right:var(--gut);font-size:clamp(64px,21vw,120px)}
   .phero-visual{width:min(58vw,260px);margin-top:28px}
   .pshot{border-width:4px;border-radius:18px;box-shadow:8px 8px 0 var(--ink)}
@@ -130,14 +135,14 @@ h1,h2{font-family:var(--head);font-weight:400;line-height:.95;text-wrap:balance}
   .pmeta{font-size:15px;margin-top:8px}
   .pprice{font-size:20px;margin-top:12px}
   .pactions{margin-top:16px;gap:12px}
-  .pbtn{width:100%;font-size:19px;padding:15px 24px}
+  .pbtn{width:100%;font-size:19px;padding:16px 24px}
   .prail{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;margin:24px calc(-1 * var(--gut)) 0;padding:0 var(--gut) 12px;scrollbar-width:none}
   .prail::-webkit-scrollbar{display:none}
   .prail li{flex:0 0 58%;scroll-snap-align:start}
   .pcard span{font-size:18px}
   .pnext{height:150vh}
   .pnext-in{--shot:44vw}
-  .pnext-layer{grid-template-columns:1fr;grid-template-rows:auto auto;align-content:center;justify-items:start;gap:28px}
+  .pnext-layer{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;align-content:center;justify-items:start;gap:28px}
 
   .pnext-name{font-size:clamp(48px,15vw,80px)}
   .pfoot{flex-direction:column;text-align:center}
@@ -145,7 +150,7 @@ h1,h2{font-family:var(--head);font-weight:400;line-height:.95;text-wrap:balance}
 
 /* Reduced motion: no parallax, no pinned flood. The next pair shows in its own colour. */
 @media (prefers-reduced-motion:reduce){
-  .phero-word,.pshot,.pmascot{will-change:auto}
+  .pshot,.pmascot{will-change:auto}
   .pnext{height:auto}
   .pnext-in{position:relative;min-height:70vh;--flood:1}
   *{transition-duration:.01ms!important;animation:none!important}

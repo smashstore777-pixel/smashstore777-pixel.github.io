@@ -181,7 +181,7 @@ function renderBag() {
       <div><h4>${esc(it.name)}</h4><p class="lp">${esc(it.detail)}</p><p class="lp">${it.each}</p><button class="rm" data-rm="${k}">Remove</button></div>
       <div class="qty"><button data-dec="${k}" aria-label="One less ${esc(it.name)}">−</button><span>${bag[k]}</span><button data-inc="${k}" aria-label="One more ${esc(it.name)}">+</button></div>
     </div>`;
-  }).join('') : `<p class="bag-empty"><img class="empty-mascot" src="img/mascot.png" alt=""><b>Bag's empty.</b>Boring. Go add some loud socks.</p>`;
+  }).join('') : `<p class="bag-empty"><img class="empty-mascot" src="img/mascot.png" alt=""><b>Bag’s empty.</b>Boring. Go add some loud socks.</p>`;
 }
 renderBag();
 renderPicker();
@@ -351,7 +351,7 @@ menu.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e
 
 /* ---------- INTRO: one short fade and rise, then the scroll scenes ---------- */
 const intro = gsap.timeline({ onComplete: () => { initScenes(); ScrollTrigger.refresh(); handleArrival(); } });
-intro.from('.hero-badge, .hero-logo, .sticker, .scroll-hint', { opacity: 0, y: 16, duration: reduce ? .01 : .5, stagger: reduce ? 0 : .05, ease: 'power2.out' });
+intro.from('.hero-badge, .hero-logo, .sticker', { opacity: 0, y: 16, duration: reduce ? .01 : .5, stagger: reduce ? 0 : .05, ease: 'power2.out' });
 
 /* ---------- SCROLL SCENES ---------- */
 function initScenes() {
@@ -384,7 +384,6 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
     // 1. the front page clears away
     .fromTo('.hero-logo', { y: 0, scale: 1, opacity: 1 }, { ...nr, y: () => -innerHeight * .35, scale: 1.15, opacity: 0, duration: 1.6, ease: 'power2.in' }, 0)
     .fromTo('.hero-badge', { y: 0, rotate: 0, opacity: 1 }, { ...nr, y: () => -innerHeight * .45, rotate: 180, opacity: 0, duration: 1.4, ease: 'power2.in' }, 0)
-    .fromTo('.scroll-hint', { y: 0, opacity: 1 }, { ...nr, y: -40, opacity: 0, duration: .6 }, 0)
     .fromTo('.sticker', { y: 0, rotate: 0 }, { ...nr, y: i => -innerHeight * (0.7 + i * .15), rotate: i => (i % 2 ? 40 : -40), duration: 1.6, ease: 'power2.in' }, 0)
     .fromTo('.hero-dark', { y: 0, yPercent: 100 }, { ...nr, y: 0, yPercent: 0, duration: 1.1, ease: 'power2.inOut' }, .9)
     // 2. a plain sock drops in, the steps appear
@@ -415,23 +414,13 @@ mm.add('(prefers-reduced-motion: no-preference)', () => {
   ScrollTrigger.create({ trigger: '.marquees', start: 'top bottom', end: 'bottom top',
     onUpdate: self => skewTo(gsap.utils.clamp(-18, 18, self.getVelocity() / -150)) });
 
-  /* WHY */
-  gsap.from('.why-card', { y: 24, opacity: 0, stagger: .08, duration: .5, ease: 'power2.out',
-    scrollTrigger: { trigger: '.why-cards', start: 'top 80%' } });
-
-  /* ORDER */
-  gsap.from('.o-step', { y: 24, opacity: 0, stagger: .08, duration: .5, ease: 'power2.out',
-    scrollTrigger: { trigger: '.order-steps', start: 'top 80%' } });
-
-  /* CTA: sock rain + title */
+  /* CTA: sock rain */
   gsap.utils.toArray('.rain img').forEach((im, i) => {
     gsap.fromTo(im, { y: 0, rotate: gsap.utils.random(-40, 40) }, {
       y: () => innerHeight * gsap.utils.random(1.3, 1.9), rotate: gsap.utils.random(-200, 200), ease: 'none',
       scrollTrigger: { trigger: '.cta', start: 'top bottom', end: 'bottom top', scrub: .5 + (i % 3) * .4 }
     });
   });
-  gsap.from('.cta-title span', { yPercent: 30, opacity: 0, stagger: .1, ease: 'power2.out',
-    scrollTrigger: { trigger: '.cta', start: 'top 70%', end: 'top 20%', scrub: 1 } });
 });
 }
 

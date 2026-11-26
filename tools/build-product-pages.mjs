@@ -12,7 +12,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(import.meta.url);
 const { drops } = require(path.join(ROOT, 'products.js'));
 const SITE = 'https://smashstore777-pixel.github.io';
-const V = '20261126g';
+const V = '20261126h';
 const DM = 'https://ig.me/m/smashstore._';
 
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -61,6 +61,7 @@ function page(p, i) {
 <link rel="stylesheet" href="../../product.css?v=${V}">
 </head>
 <body class="pp" data-impeccable-ignore="hard-offset-shadow" data-id="${p.id}" style="--c:${p.color};--on-c:${p.ink}">
+<a class="skip" href="#buy">Skip to the pair</a>
 
 <header class="pnav">
   <a class="pnav-logo" href="../../"><img src="../../img/logo.png" alt="Smash Store home" width="56" height="56"></a>
@@ -78,7 +79,7 @@ function page(p, i) {
       <figure class="pshot" data-depth="1"><img src="../../img/${p.id}.jpg" alt="${name} socks" width="347" height="463" fetchpriority="high"></figure>
       <img class="pmascot" data-depth="2" src="../../img/mascot.png" alt="" width="600" height="432">
     </div>
-    <div class="pbuy">
+    <div class="pbuy" id="buy">
       <h1>${name}</h1>
       <p class="pmeta">${typeLabel[p.type]} socks · ${esc(p.tag)}</p>
       <p class="pprice">${p.price ? '₹' + p.price.toLocaleString('en-IN') : 'Price on DM'}</p>

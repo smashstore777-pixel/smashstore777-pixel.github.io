@@ -62,9 +62,9 @@
 
   if (reduce) return;
 
-  /* ---------- HERO DEPTH: three planes, three rates ---------- */
+  /* ---------- HERO DEPTH: the name stays put, the photo and the mascot move at two rates ---------- */
   const hero = $('.phero');
-  const word = $('.phero-word'), shot = $('.pshot'), mascot = $('.pmascot');
+  const shot = $('.pshot'), mascot = $('.pmascot');
 
   /* ---------- NEXT PAIR FLOOD ---------- */
   const next = $('.pnext'), nextIn = $('.pnext-in'), nextShot = $('.pnext-shot');
@@ -82,7 +82,6 @@
     const h = hero.getBoundingClientRect();
     if (h.bottom > 0) {
       const p = Math.min(1, Math.max(0, -h.top / h.height));      // 0 at rest, 1 when the hero has left
-      word.style.transform = `translate3d(0,${(p * 18).toFixed(1)}vh,0)`;   // back plane lags behind
       shot.style.transform = `translate3d(0,${(p * -6).toFixed(1)}vh,0)`;   // middle plane leads a little
       mascot.style.transform = `translate3d(${(p * 4).toFixed(1)}vw,${(p * -22).toFixed(1)}vh,0) rotate(${(p * 14).toFixed(1)}deg)`; // front plane leads most
     }

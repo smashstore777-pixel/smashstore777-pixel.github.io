@@ -11,7 +11,7 @@
   const drops = [
     { id: 'pringles', slug: 'crunch-time',       name: 'Crunch Time',       tag: 'Food fit', type: 'full', price: null, color: '#E8201A', ink: '#FFF6E0' },
     { id: 'flame',    slug: 'classic-fire',      name: 'Classic Fire',      tag: 'Heat',     type: 'full', price: null, color: '#F2661B', ink: '#0d0d0d' },
-    { id: 'fine',     slug: 'everythings-fine',  name: "Everything's Fine", tag: 'Mood',     type: 'full', price: null, color: '#2E7B3C', ink: '#FFF6E0' },
+    { id: 'fine',     slug: 'everythings-fine',  name: 'Everything’s Fine', tag: 'Mood',     type: 'full', price: null, color: '#2E7B3C', ink: '#FFF6E0' },
     { id: 'smiley',   slug: 'emoji-overload',    name: 'Emoji Overload',    tag: 'Chaos',    type: 'full', price: null, color: '#F5B41F', ink: '#0d0d0d' },
     { id: 'turtles',  slug: 'pizza-power',       name: 'Pizza Power',       tag: 'Cartoon',  type: 'full', price: null, color: '#5AA02C', ink: '#0d0d0d' },
     { id: 'garfield', slug: 'lazy-cat-club',     name: 'Lazy Cat Club',     tag: 'Cartoon',  type: 'full', price: null, color: '#F08A1C', ink: '#0d0d0d' },
